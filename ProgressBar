@@ -1,0 +1,40 @@
+tempo = 10*1000 
+
+function inishPro ()
+    if painel == false then
+        tempoProgress = setTimer(finishProgress,tempo,1)
+        addEventHandler("onClientRender", root, colProgress )
+        painel = true
+        tick = getTickCount()
+    end
+end
+addCommandHandler("iniciarprogresso", inishPro)
+
+function converterTempo(ms) 
+    local min = math.floor ( ms/60000 ) 
+    local sec = math.floor( (ms/1000)%60 ) 
+    return min, sec 
+end 
+
+function finishProgress()
+    if isTimer(tempoProgress) then
+        killTimer(tempoProgress) 
+    end
+    if painel == true then
+        removeEventHandler("onClientRender", root, colProgress)
+        painel = false
+    end
+end
+
+local screenW, screenH = guiGetScreenSize()
+
+painel = false
+function colProgress ()
+    
+    local progressobarra = interpolateBetween(0, 0, 0, screenW * 0.1807, 0, 0, (getTickCount()-tick)/tempo, "Linear")
+    
+    dxDrawRectangle(screenW * 0.4189, screenH * 0.6966, screenW * 0.1846, screenH * 0.0260, tocolor(49, 49, 49, 255), false)  ---- fundo
+    dxDrawRectangle(screenW * 0.4209, screenH * 0.6992, progressobarra, screenH * 0.0195, tocolor(0, 69, 244, 140), false) ---- barra do progresso
+   
+
+end
